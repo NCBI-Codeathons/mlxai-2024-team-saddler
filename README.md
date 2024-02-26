@@ -40,9 +40,23 @@ By offloading these tasks to ToxPipe, it would allow toxicologists to repurpose 
 
 The aim of this codeathon is "Building Transparent ML/AI Solutions to Advance Biological Research". In order to meet that goal, this project strives to make the process of deploying ToxPipe as easy as possible. However, performing RAG using LLMs requires many different components and moving parts. While RAG can be as simple as giving an LLM access to web-search capabilities, our goal is to incorporate disparate data sources which will inevitibly increase complexity.
 
-The project will utilize a wide variety of cloud components to significantly enhance the speed of toxicological predictions. These components may include cloud-native databases such as [CosmosDB](https://azure.microsoft.com/en-us/products/cosmos-db/), and a variety of microservices to orchestrate the deployment. AI models, toxicological data, databases, and unstructured text like [NTP Technical Reports](https://ntp.niehs.nih.gov/publications/reports/index.html?type=Technical+Report) can be stored on the cloud for easy access by ToxPipe which will help reduce reducing ingress and egress costs.
+In order to speed up development during the codeathon, we will be building off of [ChemCrow](https://github.com/ur-whitelab/chemcrow-public). ChemCrow is a RAG application using LangChain, a Python-based LLM Framework, as it's primary orchistration engine. By having a template for orchestration that already includes tools desired to be in ToxPipe
 
-Microsoft Azure is of particular interest to this project, as access to LLMs, specifically[OpenAI’s GPT-3.5, GPT-4, davinci and codex models](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models#model-summary-table-and-region-availability), are crucial to the operation of ToxPipe. While we recognize that OpenAI's models are not actually "open" (in terms of both reproducing the model and reproducing results from the model), GPT-4 is still at the top of most LLM leaderboards and benchmarks. Thanks to funding from an [NIH Notice of Special Interest (NOSI) to Support the Exploration of Cloud in NIH-supported Research](https://grants.nih.gov/grants/guide/notice-files/NOT-OD-23-070.html), ToxPipe already has access to the OpenAI models. Additionally, LLMs are a singular component of the project that can be switched for more open, reproducible, and fine-tuned models in the future.
+### Deployment
+
+Our approach is to make ToxPipe easy to deploy by using Docker Compose. This will allow others to easily deploy and adapt the system for their needs.
+
+### Data Sources
+
+Data sources will initially include:
+
+- Unstructured text like [NTP Technical Reports](https://ntp.niehs.nih.gov/publications/reports/index.html?type=Technical+Report)
+- [Semantic Scholar](https://www.semanticscholar.org/)
+- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+
+### Large Language Models (LLMs)
+
+Access to LLMs, specifically[OpenAI’s GPT-3.5, GPT-4, davinci and codex models](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models#model-summary-table-and-region-availability), are crucial to the operation of ToxPipe. While we recognize that OpenAI's models are not actually "open" (in terms of both reproducing the model and reproducing results from the model), GPT-4 is still at the top of most LLM leaderboards and benchmarks. Thanks to funding from an [NIH Notice of Special Interest (NOSI) to Support the Exploration of Cloud in NIH-supported Research](https://grants.nih.gov/grants/guide/notice-files/NOT-OD-23-070.html), ToxPipe already has access to the OpenAI models. Additionally, LLMs are a singular component of the project that can be switched for more open, reproducible, and fine-tuned models in the future.
 
 ### Project Outcomes
 
