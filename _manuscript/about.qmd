@@ -1,0 +1,7 @@
+---
+title: "About"
+---
+
+This site was created using Quarto for the [NCBI Building Transparent ML/AI Solutions to Advance Biological Research Codeathon](https://ncbiinsights.ncbi.nlm.nih.gov/event/ml-ai-solutions-for-biological-research-codeathon/) from 2024-02-27 to 2024-03-01.
+
+This site was created by #team-saddler, who worked on ToxPipe during this week.

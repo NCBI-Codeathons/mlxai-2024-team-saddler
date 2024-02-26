@@ -1,0 +1,38 @@
+---
+title: ToxPipe
+keywords:
+  - Retrieval augmented generation
+  - Large Language Models
+  - Computational Toxicology
+abstract: |
+  Abstract goes here.
+plain-language-summary: |
+  A short plain-language summary...
+key-points:
+  - Key Point 1
+  - Key Point 2
+date: last-modified
+bibliography: references.bib
+citation:
+  container-title: Replace Me
+number-sections: false
+---
+
+## Introduction
+
+
+
+## Data & Methods {#sec-data-methods}
+
+
+
+
+## Conclusion
+
+
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

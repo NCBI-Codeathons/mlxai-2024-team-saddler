@@ -1,0 +1,87 @@
+project:
+  type: manuscript
+  render:
+    - "*.qmd"
+    #- "!ignored.qmd"
+    - "!about/"
+    - "!presentations/"
+
+execute:
+  freeze: auto
+
+format:
+  html:
+    toc: true
+    comments:
+      hypothesis: true # https://web.hypothes.is/
+  docx: default
+
+# Additional information on authoring metadata: https://quarto.org/docs/authoring/front-matter
+affiliations:
+  - id: ptb-tox
+    name: Predictive Toxicology Branch
+    department: Example
+    group: Toxicoinformatics Group
+  - id: uw-madison
+    name: UW-Madison
+author:
+  - name: Trey Saddler
+    degrees:
+      - B.S.
+    orcid: 0000-0001-5154-1462
+    corresponding: true
+    email: trey.saddler@nih.gov
+    roles:
+      - Investigation
+      - Project administration
+      - Software
+      - Visualization
+    affiliations:
+      - id: ptb-tox
+  - name: Parker Combs
+    degrees:
+      - B.S.
+    orcid: 0000-0001-5684-7591
+    corresponding: false
+    email: 
+    roles: []
+    affiliations:
+      - NIEHS/DTT
+  - name: William Gardner
+    degrees:
+      - B.S.
+    orcid: 
+    corresponding: false
+    roles: []
+    affiliations:
+      - id: uw-madison
+  - name: Olawale Ogundeji
+    degrees:
+      - B.S.
+    orcid: 
+    corresponding: false
+    roles: []
+    affiliations:
+      - University of Leeds
+  - name: Yixing Han
+    degrees:
+      - B.S.
+    orcid: 
+    corresponding: false
+    roles: []
+    affiliations:
+      - NHGRI
+  - name: Virginie Grosboillot
+    degrees:
+      - B.S.
+    orcid: 
+    corresponding: false
+    roles: []
+    affiliations:
+      - University of Ljubljana (Slovenia)  
+  - name: Grzegorz Boratyn 
+    degrees:
+      - B.S.
+    orcid: 
+    corresponding: false
+    roles: []
