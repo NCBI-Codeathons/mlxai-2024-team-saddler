@@ -23,10 +23,39 @@ format:
     transition: slide
 ---
 
-## Introduction
+## What software (if any) exists to help your project?
 
-Text Goes Here
+- [ChemCrow](https://github.com/ur-whitelab/chemcrow-public)
+  - ChemCrow is an open source package for the accurate solution of reasoning-intensive chemical tasks.
+  - Built with __**Langchain**__ (Python-based LLM Framework), it uses a collection of chemical tools including RDKit, paper-qa, as well as some relevant databases in chemistry, like Pubchem and chem-space.
 
-## Second Slide
+![](https://github.com/ur-whitelab/chemcrow-public/raw/main/assets/chemcrow_light_bold.png)
 
-Is this working? 
+
+## What software (if any) exists to help your project? (2)
+
+- Streamlit (Python DS Web Application framework used for ChemCrow)
+- Docker (Compose)
+- PostgreSQL
+  - pgvec extension
+- Azure OpenAI models (Access through ToxPipe funding)
+
+## What metrics will you use to measure performance?
+
+- Human eval
+  - Dr. Scott Auerbach
+- Automated LLM eval in the future, not feasible during codeathon
+- More information about long-term goals in the README.md
+
+## What data will you use?
+
+- Sources already included with ChemCrow
+  - [PubMed](https://pubmed.ncbi.nlm.nih.gov/)
+  - [rdkit](https://www.rdkit.org/docs/Overview.html#what-is-it) (PostgreSQL extension)
+- Unstructured text like [NTP Technical Reports](https://ntp.niehs.nih.gov/publications/reports/index.html?type=Technical+Report)
+- [Semantic Scholar](https://www.semanticscholar.org/)
+- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+
+## What is your planned workflow for the codeathon?
+
+- Still in progress
