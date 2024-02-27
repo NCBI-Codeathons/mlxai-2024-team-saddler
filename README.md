@@ -46,6 +46,10 @@ In order to speed up development during the codeathon, we will be building off o
 
 Our approach is to make ToxPipe easy to deploy by using Docker Compose. This will allow others to easily deploy and adapt the system for their needs.
 
+#### Deploy Docker
+
+In order to deploy this project, you will need to use Docker to build the updated Python image. You will also need to copy the `.env.example` file to `.env` and update its contents.
+
 ### Data Sources
 
 Data sources will initially include:
