@@ -5,6 +5,7 @@ project:
     #- "!ignored.qmd"
     - "!about/"
     - "!presentations/"
+  output-dir: docs
 
 execute:
   freeze: auto
