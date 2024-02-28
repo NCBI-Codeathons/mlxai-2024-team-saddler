@@ -4,7 +4,7 @@ from langchain import agents
 from langchain.base_language import BaseLanguageModel
 
 from .tp_tools import *
-from .s2 import SemanticSearch
+
 
 def make_tools(llm: BaseLanguageModel, verbose=True):
     all_tools = [
@@ -15,8 +15,7 @@ def make_tools(llm: BaseLanguageModel, verbose=True):
         SMILES2Weight(),
         FuncGroups(),
         ExplosiveCheck(),
-        ControlChemCheck(),
-        SemanticSearch()#,
+        ControlChemCheck()#,
         #Scholar2ResultLLM(llm=llm),
         #SafetySummary(llm=llm),
         # LitSearch(llm=llm, verbose=verbose),
