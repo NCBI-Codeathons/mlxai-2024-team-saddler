@@ -21,7 +21,7 @@ Final Answer: (the final answer to the original input question)
 """
 
 QUESTION_PROMPT = """
-Answer the question below using the following tools:
+Answer the question below using the following tools. Here are the names and descriptions of the tools you can use:
 
 {tool_strings}
 

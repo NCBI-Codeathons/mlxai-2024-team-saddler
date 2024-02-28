@@ -12,12 +12,14 @@ from langchain import LLMChain, PromptTemplate
 from langchain.llms import BaseLLM
 from langchain.tools import BaseTool
 from rdkit import Chem
+import os
 
 from .utils import *
 from .utils import is_smiles, tanimoto
 
 from .prompts import safety_summary_prompt, summary_each_data
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def query2smiles(
     query: str,
@@ -296,7 +298,9 @@ class SimilarControlChemCheck(BaseTool):
         """Checks max similarity between compound and controlled chemicals.
         Input SMILES string."""
 
-        data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
+        #data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
+        data_path = os.path.join(dir_path, "data/chem_wep_smi.csv")
+        
         cw_df = pd.read_csv(data_path)
 
         try:
@@ -334,7 +338,8 @@ class ControlChemCheck(BaseTool):
 
     def _run(self, query: str) -> str:
         """Checks if compound is a controlled chemical. Input CAS number."""
-        data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
+        #data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
+        data_path = os.path.join(dir_path, "data/chem_wep_smi.csv")
         cw_df = pd.read_csv(data_path)
         try:
             if is_smiles(query):
