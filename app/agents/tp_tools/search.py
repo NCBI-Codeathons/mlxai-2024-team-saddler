@@ -1,13 +1,15 @@
 import os
-import re
+from datetime import datetime as dt
+from pathlib import Path
 
 import langchain
-import paperqa
 import paperscraper
-from langchain import SerpAPIWrapper
 from langchain.base_language import BaseLanguageModel
 from langchain.tools import BaseTool
+from langchain.document_loaders import PyPDFLoader
 from pypdf.errors import PdfReadError
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chains.question_answering import load_qa_chain
 
 
 def paper_scraper(search: str, pdir: str = "query") -> dict:
@@ -29,12 +31,26 @@ def paper_search(llm, query):
     )
 
     query_chain = langchain.chains.llm.LLMChain(llm=llm, prompt=prompt)
-    if not os.path.isdir("./query"):  # todo: move to ckpt
+    if not os.path.isdir("./query"):
         os.mkdir("query/")
     search = query_chain.run(query)
     print("\nSearch:", search)
-    papers = paper_scraper(search, pdir=f"query/{re.sub(' ', '', search)}")
+    search_id = round(dt.timestamp(dt.now()))
+    search_name = search.strip()
+    for char in [' ', '"', '.']:
+        search_name=search_name.replace(char, '')
+    papers = paper_scraper(search, pdir=str(Path("query") / f'{search_id}_{search_name}'))
     return papers
+
+
+def retrieve_summary(llm, query, path):
+    loader = PyPDFLoader(path)
+    data = loader.load()
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+    docs=text_splitter.split_documents(data)
+    chain=load_qa_chain(llm, chain_type="stuff")
+    summary = chain.run(input_documents=docs, question=query)
+    return summary
 
 
 def scholar2result_llm(llm, query, k=5, max_sources=2):
@@ -43,17 +59,17 @@ def scholar2result_llm(llm, query, k=5, max_sources=2):
     papers = paper_search(llm, query)
     if len(papers) == 0:
         return "Not enough papers found"
-    docs = paperqa.Docs(llm=llm)
     not_loaded = 0
+    answer=['According to the following references:']
     for path, data in papers.items():
         try:
-            docs.add(path, data["citation"])
-        except (ValueError, FileNotFoundError, PdfReadError):
-            not_loaded += 1
+            summary = retrieve_summary(llm, query, path)
+            answer.append(f'Citation:{data["citation"]} \n Path: {path} \n Summary:{summary}')
+        except (ValueError, FileNotFoundError, PdfReadError): 
+            not_loaded += 1  
 
     print(f"\nFound {len(papers.items())} papers but couldn't load {not_loaded}")
-    answer = docs.query(query, k=k, max_sources=max_sources).formatted_answer
-    return answer
+    return "\n".join(answer)
 
 
 class Scholar2ResultLLM(BaseTool):
@@ -74,26 +90,3 @@ class Scholar2ResultLLM(BaseTool):
     async def _arun(self, query) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("this tool does not support async")
-
-
-def web_search(keywords, search_engine="google"):
-    try:
-        return SerpAPIWrapper(
-            serpapi_api_key=os.getenv("SERP_API_KEY"), search_engine=search_engine
-        ).run(keywords)
-    except:
-        return "No results, try another search"
-
-
-class WebSearch(BaseTool):
-    name = "WebSearch"
-    description = (
-        "Input a specific question, returns an answer from web search. "
-        "Do not mention any specific molecule names, but use more general features to formulate your questions."
-    )
-
-    def _run(self, query: str) -> str:
-        return web_search(query)
-
-    async def _arun(self, query: str) -> str:
-        raise NotImplementedError("Async not implemented")
