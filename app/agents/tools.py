@@ -15,8 +15,9 @@ def make_tools(llm: BaseLanguageModel, verbose=True):
         SMILES2Weight(),
         FuncGroups(),
         ExplosiveCheck(),
-        ControlChemCheck()#,
-        #Scholar2ResultLLM(llm=llm),
+        #ControlChemCheck(),
+        Scholar2ResultLLM(llm=llm),
+        ControlChemCheck(),
         #SafetySummary(llm=llm),
         # LitSearch(llm=llm, verbose=verbose),
     ]
