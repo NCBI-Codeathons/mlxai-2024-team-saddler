@@ -308,10 +308,6 @@ class SimilarControlChemCheck(BaseTool):
                 .apply(lambda x: self.tanimoto(smiles, x))
                 .max()
             )
-
-            print("==max_sim==")
-            print(max_sim)
-
             if max_sim > 0.35:
                 return (
                     f"{smiles} has a high similarity "

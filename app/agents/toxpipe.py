@@ -1,9 +1,6 @@
-from typing import Optional
-
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
-from langchain_core.output_parsers import StrOutputParser
 from langchain.chains import LLMChain
 from rmrkl import ChatZeroShotAgent, RetryAgentExecutor
 
@@ -58,23 +55,6 @@ class ToxPipeAgent:
         )
         rephrase = ChatPromptTemplate.from_template(REPHRASE_TEMPLATE)
         self.rephrase_chain = LLMChain(prompt=rephrase, llm=self.llm)
-
-        """
-        self.agent_executor_gene = RetryAgentExecutor.from_agent_and_tools(
-            tools=self.tools,
-            agent=ChatZeroShotAgent.from_llm_and_tools(
-                self.llm,
-                self.tools,
-                suffix=GENE_SUFFIX,
-                format_instructions=GENE_FORMAT_INSTRUCTIONS,
-                question_prompt=GENE_QUESTION_PROMPT,
-            ),
-            verbose=True,
-            max_iterations=max_iterations,
-        )
-        rephrase = ChatPromptTemplate.from_template(GENE_REPHRASE_TEMPLATE)
-        self.rephrase_chain = LLMChain(prompt=rephrase, llm=self.llm)
-        """
 
     def run(self, prompt):
         outputs = self.agent_executor_chem({"input": prompt})
