@@ -25,7 +25,7 @@ def query2smiles(
 ) -> str:
     if url is None:
         url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/{}"
-    r = requests.get(url.format(query, "property/IsomericSMILES/JSON"))
+    r = requests.get(url.format(query.rstrip(), "property/IsomericSMILES/JSON"))
     # convert the response to a json object
     data = r.json()
     # return the SMILES string
@@ -295,8 +295,6 @@ class SimilarControlChemCheck(BaseTool):
     def _run(self, smiles: str) -> str:
         """Checks max similarity between compound and controlled chemicals.
         Input SMILES string."""
-
-        #data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
         data_path = os.path.join(dir_path, "data/chem_wep_smi.csv")
         
         cw_df = pd.read_csv(data_path)
@@ -307,10 +305,13 @@ class SimilarControlChemCheck(BaseTool):
 
             max_sim = (
                 cw_df["smiles"]
-                .apply(lambda x: tanimoto(smiles, x))
-                .replace("Error: Not a valid SMILES string", 0.0)
+                .apply(lambda x: self.tanimoto(smiles, x))
                 .max()
             )
+
+            print("==max_sim==")
+            print(max_sim)
+
             if max_sim > 0.35:
                 return (
                     f"{smiles} has a high similarity "
@@ -320,9 +321,16 @@ class SimilarControlChemCheck(BaseTool):
                 return (
                     f"{smiles} has a low similarity "
                     f"({max_sim:.4}) to a known controlled chemical."
+                    "This is substance is safe, you may proceed with the original task."
                 )
         except:
             return "Tool error."
+        
+    def tanimoto(self, s1, s2):
+        sim = tanimoto(s1,s2)
+        if isinstance(sim, float):
+            return sim
+        return 0.0
 
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
@@ -331,14 +339,15 @@ class SimilarControlChemCheck(BaseTool):
 
 class ControlChemCheck(BaseTool):
     name = "ControlChemCheck"
-    description = "Input CAS number, True if molecule is a controlled chemical."
+    #description = "Input CAS number, True if molecule is a controlled chemical."
+    description = "Input: a chemical identifier such as a CASRN (CAS number), chemical name, or SMILES. Output: a statement saying if the input molecule is or is not a controlled chemical."
     similar_control_chem_check = SimilarControlChemCheck()
 
     def _run(self, query: str) -> str:
         """Checks if compound is a controlled chemical. Input CAS number."""
-        #data_path = pkg_resources.resource_filename("chemcrow", "data/chem_wep_smi.csv")
         data_path = os.path.join(dir_path, "data/chem_wep_smi.csv")
         cw_df = pd.read_csv(data_path)
+
         try:
             if is_smiles(query):
                 query_esc = re.escape(query)
@@ -361,8 +370,12 @@ class ControlChemCheck(BaseTool):
                     "controlled chemicals."
                 )
             else:
-                # Get smiles of CAS number
-                smi = query2smiles(query)
+                smi = query
+                issmiles = is_smiles(query)
+                if issmiles == False:
+                    # Get smiles of CAS number if not already SMILES
+                    smi = query2smiles(query)
+                
                 # Check similarity to known controlled chemicals
                 return self.similar_control_chem_check._run(smi)
 

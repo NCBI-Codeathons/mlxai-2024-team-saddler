@@ -6,7 +6,7 @@ from rdkit.Chem import AllChem
 
 def is_smiles(text):
     try:
-        m = Chem.MolFromSmiles(text, sanitize=False)
+        m = Chem.MolFromSmiles(text.rstrip(), sanitize=False)
         if m is None:
             return False
         return True
@@ -16,7 +16,7 @@ def is_smiles(text):
 
 def is_cas(text):
     pattern = r"^\d{2,7}-\d{2}-\d$"
-    return re.match(pattern, text) is not None
+    return re.match(pattern, text.rstrip()) is not None
 
 
 def largest_mol(smiles):
