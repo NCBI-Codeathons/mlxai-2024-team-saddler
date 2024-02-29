@@ -1,11 +1,9 @@
 from typing import Optional
 
-import langchain
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
 from langchain_openai import AzureChatOpenAI
-import os
 from langchain_core.output_parsers import StrOutputParser
 from langchain.tools.render import render_text_description
 
@@ -87,5 +85,3 @@ class ToxPipeAgent:
         """
         outputs = self.agent_executor({"input": prompt})
         return outputs["output"]
-
-        return(None)
