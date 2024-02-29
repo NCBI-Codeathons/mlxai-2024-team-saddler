@@ -4,7 +4,6 @@ from langchain import agents
 from langchain.base_language import BaseLanguageModel
 
 from .tp_tools import *
-from .s2 import SemanticSearch
 
 def make_tools(llm: BaseLanguageModel, verbose=True):
     all_tools = [

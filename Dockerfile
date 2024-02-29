@@ -5,6 +5,8 @@ WORKDIR /usr/src
 
 RUN apt update && apt install -y vim wget openjdk-17-jdk
 
+RUN git clone https://github.com/NCBI-Codeathons/mlxai-2024-team-saddler.git
+
 COPY requirements.txt .
 
 RUN pip install --upgrade pip
@@ -13,3 +15,5 @@ RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/blackadad/paper-scraper.git
 
 RUN rm -rf /home/root/.cache
+
+# CMD add here command to automatically lunch interface when available
