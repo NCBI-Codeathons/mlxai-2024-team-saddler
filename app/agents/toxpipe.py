@@ -2,16 +2,13 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import HumanMessage
 from langchain_openai import AzureChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
-from langchain.tools.render import render_text_description
-
 from langchain.chains import LLMChain
-
 from rmrkl import ChatZeroShotAgent, RetryAgentExecutor
 
-from .prompts import FORMAT_INSTRUCTIONS, QUESTION_PROMPT, REPHRASE_TEMPLATE, SUFFIX
+from .prompts_chem import FORMAT_INSTRUCTIONS, QUESTION_PROMPT, REPHRASE_TEMPLATE, SUFFIX
+from .prompts_gene import GENE_PREFIX, GENE_FORMAT_INSTRUCTIONS, GENE_QUESTION_PROMPT, GENE_REPHRASE_TEMPLATE, GENE_SUFFIX
 from .tools import make_tools
 
 
@@ -46,8 +43,8 @@ class ToxPipeAgent:
         self.llm = _make_llm(model, api_version, temp)
         self.tools = make_tools(self.llm, verbose=verbose)
 
-        # Initialize agent
-        self.agent_executor = RetryAgentExecutor.from_agent_and_tools(
+        # Initialize agents
+        self.agent_executor_chem = RetryAgentExecutor.from_agent_and_tools(
             tools=self.tools,
             agent=ChatZeroShotAgent.from_llm_and_tools(
                 self.llm,
@@ -59,29 +56,36 @@ class ToxPipeAgent:
             verbose=True,
             max_iterations=max_iterations,
         )
-
         rephrase = ChatPromptTemplate.from_template(REPHRASE_TEMPLATE)
         self.rephrase_chain = LLMChain(prompt=rephrase, llm=self.llm)
 
-
+        """
+        self.agent_executor_gene = RetryAgentExecutor.from_agent_and_tools(
+            tools=self.tools,
+            agent=ChatZeroShotAgent.from_llm_and_tools(
+                self.llm,
+                self.tools,
+                suffix=GENE_SUFFIX,
+                format_instructions=GENE_FORMAT_INSTRUCTIONS,
+                question_prompt=GENE_QUESTION_PROMPT,
+            ),
+            verbose=True,
+            max_iterations=max_iterations,
+        )
+        rephrase = ChatPromptTemplate.from_template(GENE_REPHRASE_TEMPLATE)
+        self.rephrase_chain = LLMChain(prompt=rephrase, llm=self.llm)
+        """
 
     def run(self, prompt):
-        """
-        # Initialize list of tools to use
-        rendered_tools = []
-        for tool in self.tools:
-            rendered_tools.append(render_text_description([tool]))
-
-        print(rendered_tools)
-        
-
-
-        question = ChatPromptTemplate.from_template(QUESTION_PROMPT)
-        model = self.llm
-        chain = question | model
-        s = chain.invoke({"input": prompt, "tool_strings": rendered_tools})
-
-        print(s)
-        """
-        outputs = self.agent_executor({"input": prompt})
+        outputs = self.agent_executor_chem({"input": prompt})
         return outputs["output"]
+    
+    def get_gene_expression(self, gene, tissue):
+        """
+        Given a gene and tissue, query the LLM to find the gene expression.
+        """
+        gene_prompt = ChatPromptTemplate.from_template(f"{GENE_PREFIX}\n\n{GENE_FORMAT_INSTRUCTIONS}\n\n{GENE_QUESTION_PROMPT}\n\n{GENE_SUFFIX}")
+        model = self.llm
+        chain = gene_prompt | model
+        res = chain.invoke({"gene": gene, "tissue": tissue})
+        return(res.content)
