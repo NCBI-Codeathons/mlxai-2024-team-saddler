@@ -16,7 +16,6 @@ def make_tools(llm: BaseLanguageModel, verbose=True):
         ExplosiveCheck(),
         ControlChemCheck(),
         Scholar2ResultLLM(llm=llm),
-        SemanticSearch(),
         SafetySummary(llm=llm),
         # LitSearch(llm=llm, verbose=verbose),
     ]
