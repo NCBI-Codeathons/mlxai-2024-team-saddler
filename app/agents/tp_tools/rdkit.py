@@ -58,7 +58,7 @@ class SMILES2Weight(BaseTool):
         super().__init__()
 
     def _run(self, smiles: str) -> str:
-        mol = Chem.MolFromSmiles(smiles)
+        mol = Chem.MolFromSmiles(smiles.rstrip())
         if mol is None:
             return "Invalid SMILES string"
         mol_weight = rdMolDescriptors.CalcExactMolWt(mol)
