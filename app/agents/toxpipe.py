@@ -1,10 +1,8 @@
 from typing import Optional
 
-import langchain
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
-import os
 from langchain_core.output_parsers import StrOutputParser
 from langchain.chains import LLMChain
 from rmrkl import ChatZeroShotAgent, RetryAgentExecutor
