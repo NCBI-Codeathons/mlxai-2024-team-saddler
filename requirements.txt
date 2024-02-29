@@ -21,8 +21,6 @@ networkx
 numpy
 openai
 pandas
-paper-qa
-paperscraper
 plotly
 polars
 pyarrow

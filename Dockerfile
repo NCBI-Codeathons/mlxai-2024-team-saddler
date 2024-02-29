@@ -10,5 +10,6 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install wheel setuptools build
 RUN pip install -r requirements.txt
+RUN pip install git+https://github.com/blackadad/paper-scraper.git
 
 RUN rm -rf /home/root/.cache
