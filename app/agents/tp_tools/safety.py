@@ -25,7 +25,11 @@ def query2smiles(
 ) -> str:
     if url is None:
         url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/{}"
-    r = requests.get(url.format(query.rstrip(), "property/IsomericSMILES/JSON"))
+
+    # Sanitize query
+    query = re.sub("Action.*", "", re.sub("Thought: .*", "", query)).rstrip()
+    r = requests.get(url.format(query, "property/IsomericSMILES/JSON"))
+    
     # convert the response to a json object
     data = r.json()
     # return the SMILES string
