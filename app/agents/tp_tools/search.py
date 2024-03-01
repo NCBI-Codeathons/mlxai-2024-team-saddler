@@ -9,7 +9,13 @@ from langchain.tools import BaseTool
 from langchain.document_loaders import PyPDFLoader
 from pypdf.errors import PdfReadError
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.chains.question_answering import load_qa_chain
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import USearch
+from langchain.chains import RetrievalQA
+from typing import List
+from toolz import compose
+from itertools import chain as ichain
+from operator import methodcaller as mc
 
 
 def paper_scraper(search: str, pdir: str = "query") -> dict:
@@ -19,7 +25,7 @@ def paper_scraper(search: str, pdir: str = "query") -> dict:
         return {}
 
 
-def paper_search(llm, query):
+def paper_search(llm, query: str):
     prompt = langchain.prompts.PromptTemplate(
         input_variables=["question"],
         template="""
@@ -43,32 +49,31 @@ def paper_search(llm, query):
     return papers
 
 
-def retrieve_summary(llm, query, path):
-    loader = PyPDFLoader(path)
-    data = loader.load()
-    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
-    docs=text_splitter.split_documents(data)
-    chain=load_qa_chain(llm, chain_type="stuff")
-    summary = chain.run(input_documents=docs, question=query)
+def retrieve_summary(llm, query: str, paths: List[str]):
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0, separators=["\n\n", "\n", " "])
+    vectorize = compose(text_splitter.split_documents, mc("load"), PyPDFLoader)
+    docs = list(ichain.from_iterable(map(vectorize, paths)))
+    embeddings=HuggingFaceEmbeddings(model_name='sentence-transformers/paraphrase-MiniLM-L6-v2')
+    db = USearch.from_documents(docs, embeddings)
+    chain=RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=db.as_retriever())
+    summary = chain.run(query)
     return summary
 
 
-def scholar2result_llm(llm, query, k=5, max_sources=2):
+def scholar2result_llm(llm, query: str):
     """Useful to answer questions that require
     technical knowledge. Ask a specific question."""
     papers = paper_search(llm, query)
     if len(papers) == 0:
         return "Not enough papers found"
-    not_loaded = 0
+    path_papers = []
     answer=['According to the following references:']
     for path, data in papers.items():
-        try:
-            summary = retrieve_summary(llm, query, path)
-            answer.append(f'Citation:{data["citation"]} \n Path: {path} \n Summary:{summary}')
-        except (ValueError, FileNotFoundError, PdfReadError): 
-            not_loaded += 1  
-
-    print(f"\nFound {len(papers.items())} papers but couldn't load {not_loaded}")
+            path_papers.append(path)
+            answer.append(f'Citation:{data["citation"]} \n Path: {path} \n')
+    print(f"\nFound {len(path_papers)} papers")
+    summary = retrieve_summary(llm, query, path_papers)
+    answer.append(f'Summary: {summary}')
     return "\n".join(answer)
 
 
