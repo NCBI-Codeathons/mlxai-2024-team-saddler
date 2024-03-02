@@ -1,21 +1,20 @@
 # ToxPipe: Semi-autonomous AI integration of diverse toxicological data streams
 
-List of participants and affiliations:
+ToxPipe is an application that makes use of large language models (LLMs), [Langchain](https://python.langchain.com/docs/get_started/introduction), and various tools and data sources to answer toxicological queries about chemicals. ToxPipe currently pulls information from [PubMed](https://pubmed.ncbi.nlm.nih.gov/), [PubChem](https://pubchem.ncbi.nlm.nih.gov/), [Semantic Scholar](https://www.semanticscholar.org/), [RDKit](https://www.rdkit.org/), and is inspired by and adapted from [ChemCrow](https://github.com/ur-whitelab/chemcrow-public).
 
-- Trey Saddler, NIEHS/DTT (Team Leader)
-- Parker Combs, NIEHS/DTT
-- William Gardner, UW-Madison
-- Olawale Ogundeji, University of Leeds
-- Dr. Yixing Han, NHGRI
-- Dr. Virginie Grosboillot, University of Ljubljana (Slovenia)
-- Dr. Grzegorz Boratyn, NCBI
+## Contributors
 
-Ad-hoc team members:
-
-- Mike Conway, NIEHS/DTT
-- Dr. Kamel Mansouri, NIEHS/DTT
-- Dr. Daniel Zilber, NIEHS/DTT
-- Dr. Scott Auerbach, NIEHS/DTT
+| Name                     | Affiliation                        | Role          |
+| ------------------------ | ---------------------------------- | ------------- |
+| Trey Saddler             | NIEHS/DTT                          | Team Lead     |
+| Parker Combs             | NIEHS/DTT                          | Tech Lead     |
+| Dr. Virginie Grosboillot | University of Ljubljana (Slovenia) |               |
+| Dr. Grzegorz Boratyn     | NCBI                               |               |
+| Dr. Yixing Han           | NHGRI                              |               |
+| Dr. David Li             | NIA                                |               |
+| Olawale Ogundeji         | University of Leeds                |               |
+| Mike Conway              | NIEHS/DTT                          | Ad-hoc member |
+| Dr. Scott Auerbach       | NIEHS/DTT                          | Ad-hoc member |
 
 ## Project Goals
 
@@ -44,7 +43,7 @@ In order to speed up development during the codeathon, we will be building off o
 
 ### Deployment
 
-Our approach is to make ToxPipe easy to deploy by using Docker Compose. This will allow others to easily deploy and adapt the system for their needs.
+Our approach is to make ToxPipe easy to deploy by using Docker. This will allow others to easily deploy and adapt the system for their needs.
 
 #### Deploy Docker
 
