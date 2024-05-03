@@ -1,3 +1,5 @@
+NOTE: Development of this project will be moving to <https://github.com/NIEHS/ToxPipe> in the future.
+
 # ToxPipe: Semi-autonomous AI integration of diverse toxicological data streams
 
 ToxPipe is an application that makes use of large language models (LLMs), [Langchain](https://python.langchain.com/docs/get_started/introduction), and various tools and data sources to answer toxicological queries about chemicals. ToxPipe currently pulls information from [PubMed](https://pubmed.ncbi.nlm.nih.gov/), [PubChem](https://pubchem.ncbi.nlm.nih.gov/), [Semantic Scholar](https://www.semanticscholar.org/), [RDKit](https://www.rdkit.org/), and is inspired by and adapted from [ChemCrow](https://github.com/ur-whitelab/chemcrow-public).
