@@ -1,5 +1,5 @@
 project:
-  type: manuscript
+  type: website
   render:
     - "*.qmd"
     #- "!ignored.qmd"
@@ -15,7 +15,7 @@ format:
     toc: true
     comments:
       hypothesis: true # https://web.hypothes.is/
-  docx: default
+  # docx: default
 
 # Additional information on authoring metadata: https://quarto.org/docs/authoring/front-matter
 affiliations:

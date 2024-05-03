@@ -1,3 +1,5 @@
+NOTE: Development of this project will be moving to <https://github.com/NIEHS/ToxPipe> in the future.
+
 # ToxPipe: Semi-autonomous AI integration of diverse toxicological data streams
 
 List of participants and affiliations:
