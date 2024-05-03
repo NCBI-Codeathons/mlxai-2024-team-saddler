@@ -1,6 +1,6 @@
 from langchain.tools import BaseTool
-from rdkit import Chem, DataStructs
-from rdkit.Chem import AllChem, rdMolDescriptors
+from rdkit import Chem
+from rdkit.Chem import rdMolDescriptors
 
 from .utils import *
 
@@ -58,7 +58,7 @@ class SMILES2Weight(BaseTool):
         super().__init__()
 
     def _run(self, smiles: str) -> str:
-        mol = Chem.MolFromSmiles(smiles)
+        mol = Chem.MolFromSmiles(smiles.rstrip())
         if mol is None:
             return "Invalid SMILES string"
         mol_weight = rdMolDescriptors.CalcExactMolWt(mol)

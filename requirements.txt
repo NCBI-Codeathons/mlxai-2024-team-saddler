@@ -8,5 +8,8 @@ python-dotenv
 rdkit
 rmrkl
 rxn4chemistry
+sentence-transformers
 streamlit
 tiktoken
+torch
+usearch
